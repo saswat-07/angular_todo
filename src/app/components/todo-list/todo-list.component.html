@@ -1,0 +1,77 @@
+<div class="border border-blue-500 m-2 p-3">
+  <div class="flex justify-between mb-4">
+    <input
+      type="text"
+      class="bg-white w-full border-none outline-none p-2 rounded"
+      placeholder="Write here..."
+      [(ngModel)]="task"
+    />
+    <button
+      class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2"
+      (click)="AddTask()"
+    >
+      Add
+    </button>
+    <button
+      class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-2"
+      (click)="DeleteAll()"
+    >
+      Delete All
+    </button>
+  </div>
+  <div class="w-full my-8 flex">
+    <input
+      type="text"
+      class="p-2 rounded border-none outline-none"
+      placeholder="Search Task"
+      [(ngModel)]="searchText"
+      (keyup.enter)="SearchTask()"
+    />
+    <button
+      class="bg-slate-500 hover:bg-slate-700 text-white font-bold py-2 px-4 rounded ml-2"
+      (click)="Clear()"
+    >
+      Clear
+    </button>
+  </div>
+
+  <div class="grid space-y-2">
+    <div class="flex" *ngFor="let item of list; let i = index">
+      <div
+        class="max-w-md flex p-3 w-full bg-white border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400"
+      >
+        <input
+          type="checkbox"
+          class="shrink-0 mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
+          (change)="ChangeStatus(item.TaskId, item.IsCompleted)"
+          [checked]="item.IsCompleted"
+          id="{{ i }}"
+        />
+        <label 
+        class="text-sm text-gray-500 ms-3 dark:text-neutral-400"
+        for="{{ i }}" *ngIf="item.IsCompleted"
+          >
+          <s>{{ item.TaskName }}</s>
+        </label>
+        <label 
+        class="text-sm  ms-3"
+        for="{{ i }}" *ngIf="!item.IsCompleted"
+          >
+          {{ item.TaskName }}
+        </label>
+      </div>
+      <button
+        class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mx-2"
+        (click)="EditTask(item.TaskId)"
+      >
+        Edit
+      </button>
+      <button
+        class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-2"
+        (click)="Delete(item.TaskId)"
+      >
+        Delete
+      </button>
+    </div>
+  </div>
+</div>
