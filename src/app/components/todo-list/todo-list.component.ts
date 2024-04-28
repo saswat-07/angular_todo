@@ -39,26 +39,25 @@ export class TodoListComponent implements OnInit {
 
   ChangeStatus(taskId: number, currentValue: boolean) {
     // debugger;
-    let newList: TaskModel[] = this.GetAll();
-    let index = newList.findIndex(x => x.TaskId == taskId);
-    if (index != null && typeof index == "number" && newList.length > index) {
-      let obj = newList[index];
-      if (obj != null && typeof obj != "undefined") {
-        obj.IsCompleted = !currentValue;
-        newList[index] = obj;
-        this.Save(newList);
-        this.list = this.Search();
-      }
+    const newList: TaskModel[] = this.GetAll();
+    const taskToUpdate = newList.find((task) => task.TaskId === taskId);
+  
+    if (taskToUpdate) {
+      taskToUpdate.IsCompleted = !currentValue;
+      this.Save(newList);
+      this.list = this.Search();
     }
   }
 
   EditTask(taskId: number) {
-    let newList: TaskModel[] = this.GetAll();
-    let index = newList.findIndex(x => x.TaskId == taskId);
-    if (index != null && typeof index == "number" && newList.length > index) {
-      let taskName = prompt("Please enter new task name", newList[index].TaskName);
-      if (taskName != null && taskName != '') {
-        newList[index].TaskName = taskName;
+    const newList = this.GetAll();
+    const taskToEdit = newList.find((task: TaskModel) => task.TaskId === taskId);
+  
+    if (taskToEdit) {
+      const taskName = prompt("Please enter new task name", taskToEdit.TaskName ?? '');
+  
+      if (taskName !== null && taskName !== '') {
+        taskToEdit.TaskName = taskName;
         this.Save(newList);
         this.list = this.Search();
       }
@@ -67,12 +66,9 @@ export class TodoListComponent implements OnInit {
 
   Delete(taskId: number) {
     let newList: TaskModel[] = this.GetAll();
-    let index = newList.findIndex(x => x.TaskId == taskId);
-    if (index != null && typeof index == "number" && newList.length > index) {
-      newList.splice(index, 1);
-      this.Save(newList);
-      this.list = this.Search();
-    }
+    this.list = newList.filter(x => x.TaskId != taskId);
+    this.Save(this.list);
+    this.list = this.Search();
   }
 
   DeleteAll() {
